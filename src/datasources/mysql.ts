@@ -2,13 +2,13 @@ import { Sequelize } from "sequelize";
 import { Logger } from "../libs";
 import { env } from "../config";
 
-const postgresClient = new Sequelize(
+const mysqlClient = new Sequelize(
     env.DB_NAME,
     env.DB_USERNAME,
     env.DB_PASSWORD,
     {
         host: env.DB_HOST,
-        dialect: "postgres",  // Change this to 'postgres'
+        dialect: "mysql",
         port: parseInt(env.DB_PORT),
         logging: false,
         pool: {
@@ -19,19 +19,14 @@ const postgresClient = new Sequelize(
         },
         define: {
             freezeTableName: true
-        },
-        dialectOptions: {
-            ssl: {
-                require: true,
-                rejectUnauthorized: false,
-            },
-        },
+        }
     }
 );
 
-postgresClient
+
+mysqlClient
     .sync()
-    .then(() => Logger.info("Successfully connected to PostgreSQL database"))
+    .then(() => Logger.info("Successfully connected to mysql database"))
     .catch((err) => Logger.error(err.message));
 
-export default postgresClient;
+export default mysqlClient;
